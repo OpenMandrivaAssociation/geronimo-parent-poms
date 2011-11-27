@@ -2,7 +2,7 @@
 
 Name:		geronimo-parent-poms
 Version:	1.6
-Release:	4
+Release:	6
 Summary:	Parent POM files for geronimo-specs
 
 Group:		Development/Java
