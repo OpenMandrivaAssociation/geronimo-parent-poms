@@ -116,3 +116,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 
+
+
+%changelog
+* Sun Nov 27 2011 Guilherme Moro <guilherme@mandriva.com> 1.6-6
++ Revision: 733969
+- rebuild
+- imported package geronimo-parent-poms
+
