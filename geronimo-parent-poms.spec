@@ -23,39 +23,39 @@ BuildArch:	noarch
 BuildRequires:	jpackage-utils >= 1.7.3
 Requires(post,postun):	jpackage-utils >= 1.7.3
 # Dependencies and plugins from the POM files
-Requires:	apache-resource-bundles
-Requires:	junit
-Requires:	maven2-common-poms
-Requires:	maven2-plugin-antrun
-Requires:	maven2-plugin-assembly
-Requires:	maven2-plugin-clean
-Requires:	maven2-plugin-compiler
-Requires:	maven2-plugin-dependency
-Requires:	maven2-plugin-deploy
-Requires:	maven2-plugin-eclipse
-Requires:	maven2-plugin-enforcer
-Requires:	maven2-plugin-gpg
-Requires:	maven2-plugin-idea
-Requires:	maven2-plugin-install
-Requires:	maven2-plugin-jar
-Requires:	maven2-plugin-javadoc
-Requires:	maven2-plugin-one
-Requires:	maven2-plugin-plugin
-Requires:	maven2-plugin-pmd
-Requires:	maven2-plugin-project-info-reports
-Requires:	maven2-plugin-rar
-Requires:	maven2-plugin-remote-resources
-Requires:	maven2-plugin-site
-Requires:	maven2-plugin-source
-Requires:	maven2-plugin-stage
-Requires:	maven2-plugin-war
-Requires:	maven-archiver
-Requires:	maven-plugin-build-helper
-Requires:	maven-plugin-bundle
-Requires:	maven-plugin-jxr
-Requires:	maven-surefire-maven-plugin
-Requires:	maven-surefire-report-maven-plugin
-Requires:	maven-wagon
+Suggests:	apache-resource-bundles
+Suggests:	junit
+Suggests:	maven2-common-poms
+Suggests:	maven2-plugin-antrun
+Suggests:	maven2-plugin-assembly
+Suggests:	maven2-plugin-clean
+Suggests:	maven2-plugin-compiler
+Suggests:	maven2-plugin-dependency
+Suggests:	maven2-plugin-deploy
+Suggests:	maven2-plugin-eclipse
+Suggests:	maven2-plugin-enforcer
+Suggests:	maven2-plugin-gpg
+Suggests:	maven2-plugin-idea
+Suggests:	maven2-plugin-install
+Suggests:	maven2-plugin-jar
+Suggests:	maven2-plugin-javadoc
+Suggests:	maven2-plugin-one
+Suggests:	maven2-plugin-plugin
+Suggests:	maven2-plugin-pmd
+Suggests:	maven2-plugin-project-info-reports
+Suggests:	maven2-plugin-rar
+Suggests:	maven2-plugin-remote-resources
+Suggests:	maven2-plugin-site
+Suggests:	maven2-plugin-source
+Suggests:	maven2-plugin-stage
+Suggests:	maven2-plugin-war
+Suggests:	maven-archiver
+Suggests:	maven-plugin-build-helper
+Suggests:	maven-plugin-bundle
+Suggests:	maven-plugin-jxr
+Suggests:	maven-surefire-maven-plugin
+Suggests:	maven-surefire-report-maven-plugin
+Suggests:	maven-wagon
 
 %description
 The Project Object Model files for the geronimo-specs modules.
