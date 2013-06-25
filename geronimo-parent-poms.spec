@@ -1,14 +1,12 @@
 %global genesis_version 1.5
 
+Summary:	Parent POM files for geronimo-specs
 Name:		geronimo-parent-poms
 Version:	1.6
 Release:	6
-Summary:	Parent POM files for geronimo-specs
-
 Group:		Development/Java
 License:	ASL 2.0
-URL:		http://geronimo.apache.org/
-
+Url:		http://geronimo.apache.org/
 # Following the parent chain all the way up ...
 # http://svn.apache.org/repos/asf/geronimo/specs/tags/specs-parent-%{version}/pom.xml
 Source0:	specs-parent.pom
@@ -18,21 +16,12 @@ Source1:	genesis-project-config.pom
 Source2:	genesis-config.pom
 # http://svn.apache.org/repos/asf/geronimo/genesis/tags/genesis-%{genesis_version}/pom.xml
 Source3:	genesis-parent.pom
-
 # Remove dependencies from POMs that aren't yet in Fedora
 Patch0:		geronimo-parent-poms-remove-dependencies.patch
-BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
-
-BuildRequires:	jpackage-utils >= 1.7.3
-Requires(post):	jpackage-utils >= 1.7.3
-Requires(postun):	jpackage-utils >= 1.7.3
-
-Provides:	genesis-project-config = %{genesis_version}
-Provides:	genesis-config = %{genesis_version}
-Provides:	genesis-parent = %{genesis_version}
-
 BuildArch:	noarch
 
+BuildRequires:	jpackage-utils >= 1.7.3
+Requires(post,postun):	jpackage-utils >= 1.7.3
 # Dependencies and plugins from the POM files
 Requires:	apache-resource-bundles
 Requires:	junit
@@ -80,23 +69,22 @@ cp %SOURCE0 %SOURCE1 %SOURCE2 %SOURCE3 .
 # Nothing to do ...
 
 %install
-rm -rf $RPM_BUILD_ROOT
-install -d -m 755 $RPM_BUILD_ROOT%{_mavenpomdir}
+install -d -m 755 %{buildroot}%{_mavenpomdir}
 
 install -pm 644 specs-parent.pom \
-	$RPM_BUILD_ROOT%{_mavenpomdir}/JPP-geronimo-specs.pom
+	%{buildroot}%{_mavenpomdir}/JPP-geronimo-specs.pom
 %add_to_maven_depmap org.apache.geronimo.specs specs %{version} JPP geronimo-specs
 
 install -pm 644 genesis-project-config.pom \
-	$RPM_BUILD_ROOT%{_mavenpomdir}/JPP-geronimo-genesis-project-config.pom
+	%{buildroot}%{_mavenpomdir}/JPP-geronimo-genesis-project-config.pom
 %add_to_maven_depmap org.apache.geronimo.genesis.config project-config %{genesis_version} JPP geronimo-genesis-project-config
 
 install -pm 644 genesis-config.pom \
-	$RPM_BUILD_ROOT%{_mavenpomdir}/JPP-geronimo-genesis-config.pom
+	%{buildroot}%{_mavenpomdir}/JPP-geronimo-genesis-config.pom
 %add_to_maven_depmap org.apache.geronimo.genesis.config config %{genesis_version} JPP geronimo-genesis-config
 
 install -pm 644 genesis-parent.pom \
-	$RPM_BUILD_ROOT%{_mavenpomdir}/JPP-geronimo-genesis.pom
+	%{buildroot}%{_mavenpomdir}/JPP-geronimo-genesis.pom
 %add_to_maven_depmap org.apache.geronimo.genesis genesis %{genesis_version} JPP geronimo-genesis
 
 %post
@@ -105,22 +93,7 @@ install -pm 644 genesis-parent.pom \
 %postun
 %update_maven_depmap
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root,-)
 %{_mavendepmapfragdir}/*
 %{_mavenpomdir}/*.pom
-
-
-
-
-
-%changelog
-* Sun Nov 27 2011 Guilherme Moro <guilherme@mandriva.com> 1.6-6
-+ Revision: 733969
-- rebuild
-- imported package geronimo-parent-poms
 
