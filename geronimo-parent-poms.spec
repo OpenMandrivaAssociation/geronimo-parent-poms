@@ -3,7 +3,7 @@
 Summary:	Parent POM files for geronimo-specs
 Name:		geronimo-parent-poms
 Version:	1.6
-Release:	7
+Release:	8
 Group:		Development/Java
 License:	ASL 2.0
 Url:		http://geronimo.apache.org/
