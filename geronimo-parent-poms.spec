@@ -1,99 +1,100 @@
-%global genesis_version 1.5
-
-Summary:	Parent POM files for geronimo-specs
+%{?_javapackages_macros:%_javapackages_macros}
 Name:		geronimo-parent-poms
 Version:	1.6
-Release:	7
-Group:		Development/Java
+Release:	16.1%{?dist}
+Summary:	Parent POM files for geronimo-specs
+
 License:	ASL 2.0
-Url:		http://geronimo.apache.org/
-# Following the parent chain all the way up ...
-# http://svn.apache.org/repos/asf/geronimo/specs/tags/specs-parent-%{version}/pom.xml
-Source0:	specs-parent.pom
-# http://svn.apache.org/repos/asf/geronimo/genesis/tags/genesis-%{genesis_version}/config/project-config/pom.xml
-Source1:	genesis-project-config.pom
-# http://svn.apache.org/repos/asf/geronimo/genesis/tags/genesis-%{genesis_version}/config/pom.xml
-Source2:	genesis-config.pom
-# http://svn.apache.org/repos/asf/geronimo/genesis/tags/genesis-%{genesis_version}/pom.xml
-Source3:	genesis-parent.pom
-# Remove dependencies from POMs that aren't yet in Fedora
-Patch0:		geronimo-parent-poms-remove-dependencies.patch
+URL:		http://geronimo.apache.org/
 BuildArch:	noarch
 
-BuildRequires:	jpackage-utils >= 1.7.3
-Requires(post,postun):	jpackage-utils >= 1.7.3
+# Following the parent chain all the way up ...
+Source0:	http://svn.apache.org/repos/asf/geronimo/specs/tags/specs-parent-%{version}/pom.xml
+Source1:	http://www.apache.org/licenses/LICENSE-2.0.txt
+
+BuildRequires:  maven-local
+BuildRequires:	jpackage-utils
+
 # Dependencies and plugins from the POM files
-Suggests:	apache-resource-bundles
-Suggests:	junit
-Suggests:	maven2-common-poms
-Suggests:	maven2-plugin-antrun
-Suggests:	maven2-plugin-assembly
-Suggests:	maven2-plugin-clean
-Suggests:	maven2-plugin-compiler
-Suggests:	maven2-plugin-dependency
-Suggests:	maven2-plugin-deploy
-Suggests:	maven2-plugin-eclipse
-Suggests:	maven2-plugin-enforcer
-Suggests:	maven2-plugin-gpg
-Suggests:	maven2-plugin-idea
-Suggests:	maven2-plugin-install
-Suggests:	maven2-plugin-jar
-Suggests:	maven2-plugin-javadoc
-Suggests:	maven2-plugin-one
-Suggests:	maven2-plugin-plugin
-Suggests:	maven2-plugin-pmd
-Suggests:	maven2-plugin-project-info-reports
-Suggests:	maven2-plugin-rar
-Suggests:	maven2-plugin-remote-resources
-Suggests:	maven2-plugin-site
-Suggests:	maven2-plugin-source
-Suggests:	maven2-plugin-stage
-Suggests:	maven2-plugin-war
-Suggests:	maven-archiver
-Suggests:	maven-plugin-build-helper
-Suggests:	maven-plugin-bundle
-Suggests:	maven-plugin-jxr
-Suggests:	maven-surefire-maven-plugin
-Suggests:	maven-surefire-report-maven-plugin
-Suggests:	maven-wagon
+Provides:       geronimo-specs = %{version}-%{release}
 
 %description
 The Project Object Model files for the geronimo-specs modules.
 
 %prep
 %setup -c -T
-cp %SOURCE0 %SOURCE1 %SOURCE2 %SOURCE3 .
-%patch0 -p1
+cp -p %{SOURCE0} .
+cp -p %{SOURCE1} LICENSE
+%pom_remove_parent
+# IDEA plugin is not really useful in Fedora
+%pom_remove_plugin :maven-idea-plugin
 
 %build
-# Nothing to do ...
+%mvn_alias : org.apache.geronimo.specs:specs
+%mvn_build
 
 %install
-install -d -m 755 %{buildroot}%{_mavenpomdir}
+%mvn_install
 
-install -pm 644 specs-parent.pom \
-	%{buildroot}%{_mavenpomdir}/JPP-geronimo-specs.pom
-%add_to_maven_depmap org.apache.geronimo.specs specs %{version} JPP geronimo-specs
+%files -f .mfiles
+%doc LICENSE
 
-install -pm 644 genesis-project-config.pom \
-	%{buildroot}%{_mavenpomdir}/JPP-geronimo-genesis-project-config.pom
-%add_to_maven_depmap org.apache.geronimo.genesis.config project-config %{genesis_version} JPP geronimo-genesis-project-config
 
-install -pm 644 genesis-config.pom \
-	%{buildroot}%{_mavenpomdir}/JPP-geronimo-genesis-config.pom
-%add_to_maven_depmap org.apache.geronimo.genesis.config config %{genesis_version} JPP geronimo-genesis-config
+%changelog
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6-16
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
-install -pm 644 genesis-parent.pom \
-	%{buildroot}%{_mavenpomdir}/JPP-geronimo-genesis.pom
-%add_to_maven_depmap org.apache.geronimo.genesis genesis %{genesis_version} JPP geronimo-genesis
+* Mon Apr 29 2013 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.6-15
+- Remove maven-idea-plugin
 
-%post
-%update_maven_depmap
+* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6-14
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
-%postun
-%update_maven_depmap
+* Wed Feb 06 2013 Java SIG <java-devel@lists.fedoraproject.org> - 1.6-13
+- Update for https://fedoraproject.org/wiki/Fedora_19_Maven_Rebuild
+- Replace maven BuildRequires with maven-local
 
-%files
-%{_mavendepmapfragdir}/*
-%{_mavenpomdir}/*.pom
+* Thu Jan 17 2013 Michal Srb <msrb@redhat.com> - 1.6-12
+- Build with xmvn
 
+* Thu Aug 23 2012 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.6-11
+- Install LICENSE file
+- Add missing R: jpackage-utils
+- Update to current packaging guidelines
+
+* Mon Aug  6 2012 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.6-10
+- Remove pom.xml from SCM
+
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Tue May 29 2012 Tomas Radej <tradej@redhat.com> - 1.6-8
+- Removed maven-pmd-plugin R
+
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Wed Sep  7 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 1.6-6
+- Remove genesis poms from package (split into separate package)
+- Use new macro for depmaps
+
+* Thu May  5 2011 Stanislav Ochotnicky <sochotnicky@redhat.com> - 1.6-5
+- Add compatibility depmap for geronimo.specs:specs-parent
+- Fixes according to new guidelines
+
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.6-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Wed Feb  3 2010 Mary Ellen Foster <mefoster at gmail.com> 1.6-3
+- Fix tabs and spaces in srpm
+- Remove config flag from mavendepmapfragdir
+- Add jpackage-utils to the BuildRequires
+
+* Tue Jan 19 2010 Mary Ellen Foster <mefoster at gmail.com> 1.6-2
+- Don't include the apache root pom; it's already in maven2-common-poms
+- Double check the dependencies to include only what's in the POMs
+- Add initial Provides for the genesis stuff
+- Fix changelog
+
+* Mon Jan 18 2010 Mary Ellen Foster <mefoster at gmail.com> 1.6-1
+- Initial package
