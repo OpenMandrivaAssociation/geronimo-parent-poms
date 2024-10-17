@@ -5,7 +5,7 @@ Release:	16.1%{?dist}
 Summary:	Parent POM files for geronimo-specs
 
 License:	ASL 2.0
-URL:		http://geronimo.apache.org/
+URL:		https://geronimo.apache.org/
 BuildArch:	noarch
 
 # Following the parent chain all the way up ...
