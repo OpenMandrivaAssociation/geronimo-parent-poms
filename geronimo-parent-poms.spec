@@ -2,7 +2,7 @@ Name:		geronimo-parent-poms
 Version:	1.6
 Release:	17
 Summary:	Parent POM files for geronimo-specs
-
+Group:		Development/Java
 License:	ASL 2.0
 URL:		https://geronimo.apache.org/
 BuildArch:	noarch
@@ -10,6 +10,7 @@ BuildArch:	noarch
 BuildRequires:	maven
 BuildRequires:	java-current-devel
 BuildSystem:	maven
+BuildOption:	validate
 BuildOption(install):	--alias org.apache.geronimo.specs:specs
 
 # Following the parent chain all the way up ...
@@ -20,7 +21,6 @@ Source1:	http://www.apache.org/licenses/LICENSE-2.0.txt
 # Dependencies and plugins from the POM files
 Provides:       geronimo-specs = %{version}-%{release}
 
-BuildRequires:	javapackages-tools
 %description
 The Project Object Model files for the geronimo-specs modules.
 
@@ -28,9 +28,9 @@ The Project Object Model files for the geronimo-specs modules.
 %setup -c -T
 cp -p %{SOURCE0} .
 cp -p %{SOURCE1} LICENSE
-%pom_remove_parent
-# IDEA plugin is not really useful in Fedora
-%pom_remove_plugin :maven-idea-plugin
+# genesis project-config is not packaged. This POM already has its own
+# group, artifact and version.
+sed -i '/<parent>/,/<\/parent>/d' pom.xml
 
 %files -f .mfiles
 %doc LICENSE
