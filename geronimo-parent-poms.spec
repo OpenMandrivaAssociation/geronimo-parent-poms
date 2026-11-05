@@ -6,6 +6,9 @@ Summary:	Parent POM files for geronimo-specs
 License:	ASL 2.0
 URL:		https://geronimo.apache.org/
 BuildArch:	noarch
+# Literal, so the first rpmbuild -bs records them before sysjar is installed.
+BuildRequires:	maven
+BuildRequires:	java-current-devel
 BuildSystem:	maven
 BuildOption(install):	--alias org.apache.geronimo.specs:specs
 
