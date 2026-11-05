@@ -1,6 +1,6 @@
 Name:		geronimo-parent-poms
 Version:	1.6
-Release:	17
+Release:	18
 Summary:	Parent POM files for geronimo-specs
 Group:		Development/Java
 License:	ASL 2.0
@@ -31,10 +31,34 @@ cp -p %{SOURCE1} LICENSE
 # genesis project-config is not packaged. This POM already has its own
 # group, artifact and version.
 sed -i '/<parent>/,/<\/parent>/d' pom.xml
-# maven-bundle-plugin is a build extension, so Maven resolves it while
-# reading the POM. Version 1.2.0 is not packaged. The manifest goal is
-# not part of validate.
-sed -i '/<extensions>true<\/extensions>/d' pom.xml
+# Children inherit build/plugins. The bundle manifest goal runs in their
+# package phase, and the jar plugin then reads a manifest that was never
+# written. Neither plugin is packaged.
+python - <<'PY'
+import re
+from pathlib import Path
+path = Path("pom.xml")
+text = path.read_text()
+text, n = re.subn(
+	r"\s*<plugin>\s*<groupId>org\.apache\.felix</groupId>\s*<artifactId>maven-bundle-plugin</artifactId>.*?</plugin>",
+	"",
+	text,
+	count=1,
+	flags=re.S,
+)
+if n != 1:
+	raise SystemExit(f"expected to remove maven-bundle-plugin, removed {n}")
+text, n = re.subn(
+	r"\s*<manifestFile>.*?</manifestFile>",
+	"",
+	text,
+	count=1,
+	flags=re.S,
+)
+if n != 1:
+	raise SystemExit(f"expected to remove manifestFile, removed {n}")
+path.write_text(text)
+PY
 
 %files -f .mfiles
 %doc LICENSE
