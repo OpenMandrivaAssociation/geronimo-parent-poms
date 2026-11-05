@@ -31,6 +31,10 @@ cp -p %{SOURCE1} LICENSE
 # genesis project-config is not packaged. This POM already has its own
 # group, artifact and version.
 sed -i '/<parent>/,/<\/parent>/d' pom.xml
+# maven-bundle-plugin is a build extension, so Maven resolves it while
+# reading the POM. Version 1.2.0 is not packaged. The manifest goal is
+# not part of validate.
+sed -i '/<extensions>true<\/extensions>/d' pom.xml
 
 %files -f .mfiles
 %doc LICENSE
